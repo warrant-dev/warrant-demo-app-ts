@@ -1,0 +1,26 @@
+{
+    "name": "warrant-demo-app-api-ts",
+    "version": "1.0.0",
+    "description": "The API for a demo app for showcasing how to integrate Warrant into a typescript/javascript backend",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "start": "node .",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@warrantdev/warrant-js": "0.0.1",
+        "axios": "^0.21.1",
+        "cors": "^2.8.5",
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.10",
+        "@types/express": "^4.17.11",
+        "@types/node": "^15.0.2",
+        "nodemon": "^2.0.7",
+        "typescript": "^4.2.4"
+    }
+}

@@ -2,10 +2,12 @@ import React, { useCallback, useState } from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { useHistory } from "react-router";
+// import { useWarrant } from "@warrantdev/react-warrant-js";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const history = useHistory();
+    // const { setSessionId } = useWarrant();
 
     const handleEmailUpdated = (event) => {
         setEmail(event.target.value);
@@ -15,9 +17,13 @@ const Login = () => {
         event.preventDefault();
 
         try {
-            await Axios.post("http://localhost:8000/api/login", {
+            const response = await Axios.post("http://localhost:8000/api/login", {
                 email,
             });
+
+            // Pass along the sessionId to the Warrant React SDK
+            // setSessionId(response.data.warrantSessionId);
+            // console.log(response.data.warrantSessionId);
 
             history.push("/stores");
         } catch (e) {

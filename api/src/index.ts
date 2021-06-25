@@ -126,14 +126,13 @@ function authorization(permissionNames: string[]) {
         }
 
         res.sendStatus(401);
-        return;
     }
 }
 
 //
 // Authentication Routes
 //
-app.post("/api/login", (req: Request, res: Response): void => {
+app.post("/api/login", async (req: Request, res: Response): Promise<void> => {
     const email = req.body.email;
     const [user, _] = getUser(email);
 
@@ -143,8 +142,14 @@ app.post("/api/login", (req: Request, res: Response): void => {
     }
 
     loggedInUserEmail = user.email;
-    res.sendStatus(200);
-    return;
+
+    // Create session for user in Warrant
+    const warrant = new WarrantClient(warrantApiKey);
+    const warrantSessionToken = await warrant.createSession(loggedInUserEmail);
+
+    res.json({
+        warrantSessionToken,
+    });
 });
 
 //
@@ -152,7 +157,6 @@ app.post("/api/login", (req: Request, res: Response): void => {
 //
 app.get("/api/stores", authorization(["view_stores"]), (req: Request, res: Response): void => {
     res.json(stores);
-    return;
 });
 
 app.get("/api/stores/:storeId", authorization(["view_stores"]), (req: Request, res: Response): void => {
@@ -274,29 +278,6 @@ app.post("/api/stores/:storeId/items/:itemId", authorization(["edit_items", "edi
 });
 
 //
-// Store Authorization Routes
-//
-// app.get("/api/stores/:storeId/items/:itemId/edit", authorization(["edit_items", "edit_items_any"]), (req: Request, res: Response): void => {
-//     const storeId = parseInt(req.params.storeId);
-//     const itemId = parseInt(req.params.itemId);
-//     const [store, _] = getStore(storeId);
-
-//     if (!store) {
-//         res.sendStatus(404);
-//         return;
-//     }
-
-//     const warrant = new WarrantClient(warrantApiKey);
-//     if (store.userId === loggedInUserId || warrant.isAuthorized(loggedInUserId.toString(), "edit_items")) {
-//         res.sendStatus(200);
-//         return;
-//     }
-
-//     res.sendStatus(401);
-//     return;
-// });
-
-//
 // Authorization Routes
 //
 app.get("/api/authorize/:permissionNames", async (req: Request, res: Response): Promise<void> => {
@@ -315,8 +296,9 @@ app.get("/api/authorize/:permissionNames", async (req: Request, res: Response): 
     return;
 });
 
-app.listen(8000, () => {
-    console.log("Server listening on port 8000. API available at http://localhost:8000");
+const port = 5000;
+app.listen(port, () => {
+    console.log(`Server listening on port ${port}. API available at http://localhost:${port}`);
 });
 
 function getUser(email: string): [User, number] | [undefined, number] {

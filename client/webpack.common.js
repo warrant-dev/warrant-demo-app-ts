@@ -33,12 +33,9 @@ module.exports = env => {
         },
 
         resolve: {
-            alias: {
-                modules: path.resolve(__dirname, "src/modules/"),
-            },
-
-            // Add '.ts' and '.tsx' as resolvable extensions.
-            extensions: [".js", ".jsx", ".js", ".json"]
+            // Add '.js' and '.jsx' as resolvable extensions.
+            extensions: [".js", ".jsx", ".js", ".json"],
+            symlinks: false,
         },
 
         module: {

@@ -12,7 +12,7 @@ module.exports = env => {
         plugins: [
             new CleanWebpackPlugin({cleanStaleWebpackAssets: false}),
             new HtmlWebpackPlugin({
-                title: "StoreBuddy - Your one stop shop",
+                title: "Warrant Demo App",
                 filename: "index.html",
                 template: "public/index.html",
                 chunks: ["vendor", "main"],
@@ -30,12 +30,12 @@ module.exports = env => {
             hot: true,
             publicPath: '/',
             historyApiFallback: true,
+            port: 5050,
         },
 
         resolve: {
             // Add '.js' and '.jsx' as resolvable extensions.
             extensions: [".js", ".jsx", ".js", ".json"],
-            symlinks: false,
         },
 
         module: {

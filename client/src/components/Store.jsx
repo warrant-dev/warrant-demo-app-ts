@@ -1,60 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 import Axios from "axios";
-import { Link } from "react-router-dom";
+import { ProtectedComponent } from "@warrantdev/react-warrant-js";
+import PageWrapper from "./PageWrapper";
 
 const Store = () => {
     const { storeId } = useParams();
     const [store, setStore] = useState();
-    const [canEditStore, setCanEditStore] = useState(false);
 
     useEffect(() => {
         const getStore = async () => {
             try {
-                const response = await Axios.get(`http://localhost:8000/api/stores/${storeId}`);
+                const response = await Axios.get(`http://localhost:5000/api/stores/${storeId}`);
                 setStore(response.data);
             } catch (e) {
                 console.log("Error getting store", e);
             }
         };
 
-        const getCanEditStore = async () => {
-            try {
-                const response = await Axios.get(`http://localhost:8000/api/stores/${storeId}/edit`)
-                if (response.status === 200) {
-                    setCanEditStore(true);
-                }
-            } catch (e) {
-                if (e.response.status !== 401) {
-                    console.log("Error checking if can edit store", e);
-                }
-            }
-        };
-
         getStore();
-        getCanEditStore();
     }, []);
 
     if (!store) {
         return null;
     }
 
-    return <StorePageWrapper>
+    return <PageWrapper>
         <StoreTitle>{store.name}</StoreTitle>
-        {canEditStore && <EditButton to={`/stores/${storeId}/edit`}>Edit Store</EditButton>}
+        <ProtectedComponent objectType="store" objectId={storeId} relation="edit">
+            <EditButton to={`/stores/${storeId}/edit`}>Edit Store</EditButton>
+        </ProtectedComponent>
         <ItemList>
             {store.items.map((item) => <Item key={item.id}>
                 <Link to={`/stores/${storeId}/items/${item.id}`}><h3>{item.name} - ${item.price}</h3></Link>
                 <p>{item.description}</p>
             </Item>)}
         </ItemList>
-    </StorePageWrapper>;
+    </PageWrapper>;
 };
-
-const StorePageWrapper = styled.div`
-    margin: auto;
-`;
 
 const StoreTitle = styled.h2`
     text-align: center;

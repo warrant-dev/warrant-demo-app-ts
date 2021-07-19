@@ -1,0 +1,81 @@
+[
+    {
+        "typeId": "group",
+        "relations": {
+            "member": {
+                "name": "member"
+            }
+        }
+    },
+    {
+        "typeId": "store",
+        "relations": {
+            "owner": {
+                "name": "owner"
+            },
+            "create": {
+                "name": "create"
+            },
+            "edit": {
+                "name": "edit",
+                "userset_rewrite": {
+                    "type": "union",
+                    "computed_usersets": [
+                        {
+                            "relation": "owner"
+                        }
+                    ]
+                }
+            },
+            "view": {
+                "name": "view",
+                "userset_rewrite": {
+                    "type": "union",
+                    "computed_usersets": [
+                        {
+                            "relation": "edit"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    {
+        "typeId": "item",
+        "relations": {
+            "parent_store": {
+                "name": "parent_store"
+            },
+            "create": {
+                "name": "create"
+            },
+            "edit": {
+                "name": "edit",
+                "userset_rewrite": {
+                    "type": "union",
+                    "tuple_to_usersets": [
+                        {
+                            "tupleset": {
+                                "relation": "parent_store"
+                            },
+                            "computed_tupleset": {
+                                "relation": "edit"
+                            }
+                        }
+                    ]
+                }
+            },
+            "view": {
+                "name": "view",
+                "userset_rewrite": {
+                    "type": "union",
+                    "computed_usersets": [
+                        {
+                            "relation": "edit"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+]

@@ -2,38 +2,38 @@ import React, { useCallback, useState } from "react";
 import Axios from "axios";
 import styled from "styled-components";
 import { useHistory } from "react-router";
-// import { useWarrant } from "@warrantdev/react-warrant-js";
+import { useWarrant } from "@warrantdev/react-warrant-js";
+import PageWrapper from "./PageWrapper";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const history = useHistory();
-    // const { setSessionId } = useWarrant();
+    const { setSessionToken } = useWarrant();
 
     const handleEmailUpdated = (event) => {
         setEmail(event.target.value);
-    };
+    }
 
     const login = useCallback(async (event) => {
         event.preventDefault();
 
         try {
-            const response = await Axios.post("http://localhost:8000/api/login", {
+            const response = await Axios.post("http://localhost:5000/api/login", {
                 email,
             });
 
             // Pass along the sessionId to the Warrant React SDK
-            // setSessionId(response.data.warrantSessionId);
-            // console.log(response.data.warrantSessionId);
+            setSessionToken(response.data.warrantSessionToken);
 
-            history.push("/stores");
+            history.replace("/stores");
         } catch (e) {
             console.log("Error while logging in", e);
         }
     }, [email]);
 
-    return <LoginPageWrapper>
-        <LoginWrapper onSubmit={login}>
-            <h2>Store Buddy</h2>
+    return <PageWrapper>
+        <LoginForm onSubmit={login}>
+            <h2>Demo App</h2>
             <EmailInput
                 id="email"
                 type="email"
@@ -43,35 +43,55 @@ const Login = () => {
                 required
             />
             <SubmitButton type="submit">Log In</SubmitButton>
-        </LoginWrapper>
+        </LoginForm>
         <UserList>
             <h3>Users</h3>
-            <h4>admin@storebuddy.com - Customer Support (Admin)</h4>
-            <h4>tony@starkindustries.com - Store Owner</h4>
-            <h4>michael.scott@dundermifflin.com - Store Owner</h4>
-            <h4>johndoe@gmail.com - Shopper</h4>
+            <h4>ceo@demoapp-inc.com</h4>
+            <h4>jane@demoapp-inc.com</h4>
+            <h4>tony@starkindustries.com</h4>
+            <h4>michael.scott@dundermifflin.com</h4>
         </UserList>
-    </LoginPageWrapper>;
-};
+    </PageWrapper>;
+}
 
-const LoginPageWrapper = styled.div`
-    margin: auto;
-`;
-
-const LoginWrapper = styled.form`
-    max-width: 350px;
+const LoginForm = styled.form`
+    max-width: 250px;
     margin: auto;
     margin-top: 15%;
     height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 const EmailInput = styled.input`
-    width: 250px;
+    width: 243px;
+    height: 28px;
+    padding: 0;
+    padding-left: 5px;
+
+    font-size: 16px;
+    line-height: 20px;
+    border: 1px solid gray;
+    border-radius: 4px;
 `;
 
 const SubmitButton = styled.button`
-    width: 55px;
-    margin-left: 5px;
+    width: 100%;
+
+    cursor: pointer;
+
+    margin-top: 8px;
+    padding: 8px;
+    color: white;
+    background-color: green;
+    border-radius: 4px;
+    border: none;
+
+    &:hover {
+        background-color: darkgreen;
+    }
 `;
 
 const UserList = styled.div`

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Axios from "axios";
 import { Link } from "react-router-dom";
+import PageWrapper from "./PageWrapper";
 
 const Stores = () => {
     const [stores, setStores] = useState([]);
@@ -9,7 +10,7 @@ const Stores = () => {
     useEffect(() => {
         const getStores = async () => {
             try {
-                const response = await Axios.get("http://localhost:8000/api/stores");
+                const response = await Axios.get("http://localhost:5000/api/stores");
                 setStores(response.data);
             } catch (e) {
                 console.log("Error getting stores", e);
@@ -23,19 +24,15 @@ const Stores = () => {
         return null;
     }
 
-    return <StoresPageWrapper>
+    return <PageWrapper>
         <StoreList>
             <h2>Stores</h2>
             {stores.map((store) => <Link to={`/stores/${store.id}`} key={store.id}>
                 <Store><h3>{store.name} - {store.items.length} Items</h3></Store>
             </Link>)}
         </StoreList>
-    </StoresPageWrapper>;
+    </PageWrapper>;
 };
-
-const StoresPageWrapper = styled.div`
-    margin: auto;
-`;
 
 const StoreList = styled.div`
     display: flex;

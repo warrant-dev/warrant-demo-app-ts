@@ -4,12 +4,13 @@
   "description": "The client for a demo app for showcasing how to integrate Warrant into a typescript/javascript backend",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "webpack serve --open --mode development --env NODE_ENV=development --config webpack.common.js",
+    "dev": "webpack serve --open --mode development --config webpack.common.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Warrant <hello@warrant.dev> (https://warrant.dev)",
   "license": "ISC",
   "dependencies": {
+    "@warrantdev/react-warrant-js": "^0.0.2",
     "axios": "^0.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -19,9 +20,6 @@
   "devDependencies": {
     "@babel/core": "^7.14.0",
     "@babel/preset-react": "^7.13.13",
-    "@types/react": "^17.0.11",
-    "@types/react-dom": "^17.0.8",
-    "@warrantdev/react-warrant-js": "file:../../warrantdev-react-warrant-js-0.0.1.tgz",
     "babel-loader": "^8.2.2",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",

@@ -1,0 +1,217 @@
+[
+    {
+        "objectType": "group",
+        "objectId": "super_admin",
+        "relation": "member",
+        "user": {
+            "userId": "15"
+        }
+    },
+    {
+        "objectType": "group",
+        "objectId": "super_admin",
+        "relation": "member",
+        "user": {
+            "userId": "34"
+        }
+    },
+    {
+        "objectType": "group",
+        "objectId": "store_owner",
+        "relation": "member",
+        "user": {
+            "userId": "38265"
+        }
+    },
+    {
+        "objectType": "group",
+        "objectId": "store_owner",
+        "relation": "member",
+        "user": {
+            "userId": "7409"
+        }
+    },
+    {
+        "objectType": "group",
+        "objectId": "shopper",
+        "relation": "member",
+        "user": {
+            "userId": "12107"
+        }
+    },
+    {
+        "objectType": "group",
+        "objectId": "shopper",
+        "relation": "member",
+        "user": {
+            "objectType": "group",
+            "objectId": "store_owner",
+            "relation": "member"
+        }
+    },
+
+    {
+        "objectType": "store",
+        "objectId": "ANY",
+        "relation": "create",
+        "user": {
+            "objectType": "group",
+            "objectId": "super_admin",
+            "relation": "member"
+        }
+    },
+    {
+        "objectType": "store",
+        "objectId": "ANY",
+        "relation": "create",
+        "user": {
+            "objectType": "group",
+            "objectId": "store_owner",
+            "relation": "member"
+        }
+    },
+
+    {
+        "objectType": "store",
+        "objectId": "ANY",
+        "relation": "edit",
+        "user": {
+            "objectType": "group",
+            "objectId": "super_admin",
+            "relation": "member"
+        }
+    },
+
+    {
+        "objectType": "store",
+        "objectId": "1053",
+        "relation": "owner",
+        "user": {
+            "userId": "38265"
+        }
+    },
+    {
+        "objectType": "store",
+        "objectId": "324",
+        "relation": "owner",
+        "user": {
+            "userId": "7409"
+        }
+    },
+
+    {
+        "objectType": "store",
+        "objectId": "ANY",
+        "relation": "view",
+        "user": {
+            "objectType": "group",
+            "objectId": "shopper",
+            "relation": "member"
+        }
+    },
+
+    {
+        "objectType": "item",
+        "objectId": "ANY",
+        "relation": "create",
+        "user": {
+            "objectType": "group",
+            "objectId": "super_admin",
+            "relation": "member"
+        }
+    },
+    {
+        "objectType": "item",
+        "objectId": "ANY",
+        "relation": "create",
+        "user": {
+            "objectType": "group",
+            "objectId": "store_owner",
+            "relation": "member"
+        }
+    },
+
+    {
+        "objectType": "item",
+        "objectId": "ANY",
+        "relation": "edit",
+        "user": {
+            "objectType": "group",
+            "objectId": "super_admin",
+            "relation": "member"
+        }
+    },
+
+    {
+        "objectType": "item",
+        "objectId": "50187",
+        "relation": "parent_store",
+        "user": {
+            "objectType": "store",
+            "objectId": "1053",
+            "relation": "..."
+        }
+    },
+    {
+        "objectType": "item",
+        "objectId": "50194",
+        "relation": "parent_store",
+        "user": {
+            "objectType": "store",
+            "objectId": "1053",
+            "relation": "..."
+        }
+    },
+    {
+        "objectType": "item",
+        "objectId": "50205",
+        "relation": "parent_store",
+        "user": {
+            "objectType": "store",
+            "objectId": "1053",
+            "relation": "..."
+        }
+    },
+
+    {
+        "objectType": "item",
+        "objectId": "1098",
+        "relation": "parent_store",
+        "user": {
+            "objectType": "store",
+            "objectId": "324",
+            "relation": "..."
+        }
+    },
+    {
+        "objectType": "item",
+        "objectId": "1257",
+        "relation": "parent_store",
+        "user": {
+            "objectType": "store",
+            "objectId": "324",
+            "relation": "..."
+        }
+    },
+    {
+        "objectType": "item",
+        "objectId": "1260",
+        "relation": "parent_store",
+        "user": {
+            "objectType": "store",
+            "objectId": "324",
+            "relation": "..."
+        }
+    },
+
+    {
+        "objectType": "item",
+        "objectId": "ANY",
+        "relation": "view",
+        "user": {
+            "objectType": "group",
+            "objectId": "shopper",
+            "relation": "member"
+        }
+    }
+]

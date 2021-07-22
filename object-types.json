@@ -1,38 +1,32 @@
 [
     {
-        "typeId": "group",
+        "type": "group",
         "relations": {
-            "member": {
-                "name": "member"
-            }
+            "member": {}
         }
     },
     {
-        "typeId": "store",
+        "type": "store",
         "relations": {
-            "owner": {
-                "name": "owner"
-            },
-            "create": {
-                "name": "create"
-            },
+            "owner": {},
+            "create": {},
             "edit": {
-                "name": "edit",
-                "userset_rewrite": {
-                    "type": "union",
-                    "computed_usersets": [
+                "inherit_from": {
+                    "type": "anyOf",
+                    "rules": [
                         {
+                            "type": "userset",
                             "relation": "owner"
                         }
                     ]
                 }
             },
             "view": {
-                "name": "view",
-                "userset_rewrite": {
-                    "type": "union",
-                    "computed_usersets": [
+                "inherit_from": {
+                    "type": "anyOf",
+                    "rules": [
                         {
+                            "type": "userset",
                             "relation": "edit"
                         }
                     ]
@@ -41,24 +35,19 @@
         }
     },
     {
-        "typeId": "item",
+        "type": "item",
         "relations": {
-            "parent_store": {
-                "name": "parent_store"
-            },
-            "create": {
-                "name": "create"
-            },
+            "parent_store": {},
+            "create": {},
             "edit": {
-                "name": "edit",
-                "userset_rewrite": {
-                    "type": "union",
-                    "tuple_to_usersets": [
+                "inherit_from": {
+                    "type": "anyOf",
+                    "rules": [
                         {
-                            "tupleset": {
-                                "relation": "parent_store"
-                            },
-                            "computed_tupleset": {
+                            "type": "objectUserset",
+                            "relation": "parent_store",
+                            "userset": {
+                                "type": "userset",
                                 "relation": "edit"
                             }
                         }
@@ -67,10 +56,11 @@
             },
             "view": {
                 "name": "view",
-                "userset_rewrite": {
-                    "type": "union",
-                    "computed_usersets": [
+                "inherit_from": {
+                    "type": "anyOf",
+                    "rules": [
                         {
+                            "type": "userset",
                             "relation": "edit"
                         }
                     ]

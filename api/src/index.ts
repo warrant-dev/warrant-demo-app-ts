@@ -166,6 +166,7 @@ app.post("/api/login", async (req: Request, res: Response): Promise<void> => {
         res.json({
             warrantSessionToken,
         });
+
         return;
     } catch (e) {
         console.log(e);
@@ -195,11 +196,9 @@ app.get("/api/stores/:storeId", authorization("store", "storeId", ["view"], getL
 
 app.post("/api/stores/:storeId", authorization("store", "storeId", ["edit"], getLoggedInUserId), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
-    console.log(storeId)
     const [store, index] = getStore(storeId);
-    const [loggedInUser, _] = getUserById(loggedInUserId);
 
-    if (!store || store.userId !== loggedInUser.id) {
+    if (!store) {
         res.sendStatus(404);
         return;
     }
@@ -237,9 +236,8 @@ app.post("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", [
     const storeId = parseInt(req.params.storeId);
     const itemId = parseInt(req.params.itemId);
     const [store, storeIndex] = getStore(storeId);
-    const [loggedInUser] = getUserById(loggedInUserId);
 
-    if (!store || store.userId !== loggedInUser.id) {
+    if (!store) {
         res.sendStatus(404);
         return;
     }

@@ -46,10 +46,11 @@ const Login = () => {
         </LoginForm>
         <UserList>
             <h3>Users</h3>
-            <h4>ceo@demoapp-inc.com</h4>
-            <h4>jane@demoapp-inc.com</h4>
-            <h4>tony@starkindustries.com</h4>
-            <h4>michael.scott@dundermifflin.com</h4>
+            <h4>ceo@demoapp-inc.com - Super Admin</h4>
+            <h4>jane@demoapp-inc.com - Super Admin</h4>
+            <h4>tony@starkindustries.com - Store Owner</h4>
+            <h4>michael.scott@dundermifflin.com - Store Owner</h4>
+            <h4>johndoe@gmail.com - Shopper</h4>
         </UserList>
     </PageWrapper>;
 }

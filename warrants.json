@@ -149,7 +149,7 @@
         "user": {
             "objectType": "store",
             "objectId": "1053",
-            "relation": "..."
+            "relation": "IGNORE"
         }
     },
     {
@@ -159,7 +159,7 @@
         "user": {
             "objectType": "store",
             "objectId": "1053",
-            "relation": "..."
+            "relation": "IGNORE"
         }
     },
     {
@@ -169,7 +169,7 @@
         "user": {
             "objectType": "store",
             "objectId": "1053",
-            "relation": "..."
+            "relation": "IGNORE"
         }
     },
 
@@ -180,7 +180,7 @@
         "user": {
             "objectType": "store",
             "objectId": "324",
-            "relation": "..."
+            "relation": "IGNORE"
         }
     },
     {
@@ -190,7 +190,7 @@
         "user": {
             "objectType": "store",
             "objectId": "324",
-            "relation": "..."
+            "relation": "IGNORE"
         }
     },
     {
@@ -200,7 +200,7 @@
         "user": {
             "objectType": "store",
             "objectId": "324",
-            "relation": "..."
+            "relation": "IGNORE"
         }
     },
 

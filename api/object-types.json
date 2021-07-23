@@ -11,7 +11,7 @@
             "owner": {},
             "create": {},
             "edit": {
-                "inherit_from": {
+                "inheritFrom": {
                     "type": "anyOf",
                     "rules": [
                         {
@@ -22,7 +22,7 @@
                 }
             },
             "view": {
-                "inherit_from": {
+                "inheritFrom": {
                     "type": "anyOf",
                     "rules": [
                         {
@@ -40,7 +40,7 @@
             "parent_store": {},
             "create": {},
             "edit": {
-                "inherit_from": {
+                "inheritFrom": {
                     "type": "anyOf",
                     "rules": [
                         {
@@ -56,7 +56,7 @@
             },
             "view": {
                 "name": "view",
-                "inherit_from": {
+                "inheritFrom": {
                     "type": "anyOf",
                     "rules": [
                         {

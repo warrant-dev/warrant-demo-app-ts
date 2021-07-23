@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1053,
+        "userId": 38265,
+        "name": "Michael Scott Paper Company",
+        "items": [
+            {
+                "id": 50187,
+                "storeId": 1053,
+                "name": "Standard 8.5x11 White Paper (500 sheets)",
+                "description": "One ream of our standard quality 8.5in x 11in white paper",
+                "price": 4.99
+            },
+            {
+                "id": 50194,
+                "storeId": 1053,
+                "name": "High Quality 8.5x11 White Paper (500 sheets)",
+                "description": "One ream of our highest quality 8.5in x 11in glossy white paper",
+                "price": 6.99
+            },
+            {
+                "id": 50205,
+                "storeId": 1053,
+                "name": "Standard 8.5x11 White Paper (10 x 500 sheets)",
+                "description": "10 reams of our standard quality 8.5in x 11in white paper",
+                "price": 45.99
+            }
+        ]
+    },
+    {
+        "id": 324,
+        "userId": 7409,
+        "name": "Iron Man Memorabilia Store",
+        "items": [
+            {
+                "id": 1098,
+                "storeId": 324,
+                "name": "Arc Reactor Prototype",
+                "description": "An exact replica of the Arc Reactor prototype Tony built to keep shrapnel from reaching his heart",
+                "price": 124.99
+            },
+            {
+                "id": 1257,
+                "storeId": 324,
+                "name": "Iron Man (Mk I)",
+                "description": "An exact replica of the Mk I Iron Man suit Tony built to escape his kidnappers",
+                "price": 799.99
+            },
+            {
+                "id": 1260,
+                "storeId": 324,
+                "name": "Flight Stabilizer",
+                "description": "A handheld flight stabilizer capable of releasing a concussive blast",
+                "price": 1249.99
+            }
+        ]
+    }
+]

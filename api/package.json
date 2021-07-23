@@ -4,14 +4,15 @@
     "description": "The API for a demo app for showcasing how to integrate Warrant into a typescript/javascript backend",
     "main": "dist/index.js",
     "scripts": {
+        "init": "node src/scripts/initializeData.js",
         "build": "tsc",
         "start": "npm run build && node .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "author": "",
+    "author": "Warrant <hello@warrant.dev> (https://warrant.dev)",
     "license": "ISC",
     "dependencies": {
-        "@warrantdev/warrant-node": "^0.0.3",
+        "@warrantdev/warrant-node": "^0.0.4",
         "axios": "^0.21.1",
         "cors": "^2.8.5",
         "express": "^4.17.1"

@@ -1,0 +1,32 @@
+[
+    {
+        "id": 15,
+        "email": "ceo@demoapp-inc.com",
+        "firstName": "CEO",
+        "lastName": "Company Inc."
+    },
+    {
+        "id": 34,
+        "email": "jane@demoapp-inc.com",
+        "firstName": "Jane",
+        "lastName": "Doe"
+    },
+    {
+        "id": 7409,
+        "email": "tony@starkindustries.com",
+        "firstName": "Anthony",
+        "lastName": "Stark"
+    },
+    {
+        "id": 12107,
+        "email": "johndoe@gmail.com",
+        "firstName": "John",
+        "lastName": "Doe"
+    },
+    {
+        "id": 38265,
+        "email": "michael.scott@dundermifflin.com",
+        "firstName": "Michael",
+        "lastName": "Scott"
+    }
+]

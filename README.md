@@ -1,16 +1,16 @@
 # Warrant Demo Application
 
-## Client
+## Client (React)
 ```
 > cd client
 > npm install
 > npm run dev
 ```
 
-## Server
+## Server (Express)
 ```
 > cd api
 > npm install
-> npm run build
+> npm run init # only required the first time you setup the app
 > npm run start
 ```

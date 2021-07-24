@@ -53,7 +53,7 @@
     {
         "objectType": "store",
         "objectId": "ANY",
-        "relation": "create",
+        "relation": "creator",
         "user": {
             "objectType": "group",
             "objectId": "superAdmin",
@@ -63,7 +63,7 @@
     {
         "objectType": "store",
         "objectId": "ANY",
-        "relation": "create",
+        "relation": "creator",
         "user": {
             "objectType": "group",
             "objectId": "storeOwner",
@@ -74,7 +74,7 @@
     {
         "objectType": "store",
         "objectId": "ANY",
-        "relation": "edit",
+        "relation": "editor",
         "user": {
             "objectType": "group",
             "objectId": "superAdmin",
@@ -102,7 +102,7 @@
     {
         "objectType": "store",
         "objectId": "ANY",
-        "relation": "view",
+        "relation": "viewer",
         "user": {
             "objectType": "group",
             "objectId": "shopper",
@@ -113,7 +113,7 @@
     {
         "objectType": "item",
         "objectId": "ANY",
-        "relation": "create",
+        "relation": "creator",
         "user": {
             "objectType": "group",
             "objectId": "superAdmin",
@@ -123,7 +123,7 @@
     {
         "objectType": "item",
         "objectId": "ANY",
-        "relation": "create",
+        "relation": "creator",
         "user": {
             "objectType": "group",
             "objectId": "storeOwner",
@@ -134,7 +134,7 @@
     {
         "objectType": "item",
         "objectId": "ANY",
-        "relation": "edit",
+        "relation": "editor",
         "user": {
             "objectType": "group",
             "objectId": "superAdmin",
@@ -207,7 +207,7 @@
     {
         "objectType": "item",
         "objectId": "ANY",
-        "relation": "view",
+        "relation": "viewer",
         "user": {
             "objectType": "group",
             "objectId": "shopper",

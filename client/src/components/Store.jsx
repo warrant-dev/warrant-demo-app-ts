@@ -28,7 +28,7 @@ const Store = () => {
 
     return <PageWrapper>
         <StoreTitle>{store.name}</StoreTitle>
-        <ProtectedComponent objectType="store" objectId={storeId} relation="edit">
+        <ProtectedComponent objectType="store" objectId={storeId} relation="editor">
             <EditButton to={`/stores/${storeId}/edit`}>Edit Store</EditButton>
         </ProtectedComponent>
         <ItemList>

@@ -30,7 +30,7 @@ const App = () => {
                         options={{
                             objectType: "item",
                             objectIdParam: "itemId",
-                            relation: "view",
+                            relation: "viewer",
                             redirectTo: "/",
                         }}
                     />
@@ -42,7 +42,7 @@ const App = () => {
                         options={{
                             objectType: "store",
                             objectIdParam: "storeId",
-                            relation: "edit",
+                            relation: "editor",
                             redirectTo: "/",
                         }}
                     />
@@ -54,7 +54,7 @@ const App = () => {
                         options={{
                             objectType: "store",
                             objectIdParam: "storeId",
-                            relation: "view",
+                            relation: "viewer",
                             redirectTo: "/",
                         }}
                     />
@@ -66,7 +66,7 @@ const App = () => {
                         options={{
                             objectType: "store",
                             objectIdParam: WARRANT_IGNORE_ID,
-                            relation: "view",
+                            relation: "viewer",
                             redirectTo: "/",
                         }}
                     />

@@ -9,28 +9,24 @@
         "type": "store",
         "relations": {
             "owner": {},
-            "create": {},
-            "edit": {
-                "inheritFrom": {
-                    "type": "anyOf",
-                    "rules": [
-                        {
-                            "type": "userset",
-                            "relation": "owner"
-                        }
-                    ]
-                }
+            "creator": {},
+            "editor": {
+                "type": "anyOf",
+                "rules": [
+                    {
+                        "type": "userset",
+                        "relation": "owner"
+                    }
+                ]
             },
-            "view": {
-                "inheritFrom": {
-                    "type": "anyOf",
-                    "rules": [
-                        {
-                            "type": "userset",
-                            "relation": "edit"
-                        }
-                    ]
-                }
+            "viewer": {
+                "type": "anyOf",
+                "rules": [
+                    {
+                        "type": "userset",
+                        "relation": "editor"
+                    }
+                ]
             }
         }
     },
@@ -38,33 +34,28 @@
         "type": "item",
         "relations": {
             "parent_store": {},
-            "create": {},
-            "edit": {
-                "inheritFrom": {
-                    "type": "anyOf",
-                    "rules": [
-                        {
-                            "type": "objectUserset",
-                            "relation": "parent_store",
-                            "userset": {
-                                "type": "userset",
-                                "relation": "edit"
-                            }
-                        }
-                    ]
-                }
-            },
-            "view": {
-                "name": "view",
-                "inheritFrom": {
-                    "type": "anyOf",
-                    "rules": [
-                        {
+            "creator": {},
+            "editor": {
+                "type": "anyOf",
+                "rules": [
+                    {
+                        "type": "objectUserset",
+                        "relation": "parent_store",
+                        "userset": {
                             "type": "userset",
-                            "relation": "edit"
+                            "relation": "editor"
                         }
-                    ]
-                }
+                    }
+                ]
+            },
+            "viewer": {
+                "type": "anyOf",
+                "rules": [
+                    {
+                        "type": "userset",
+                        "relation": "editor"
+                    }
+                ]
             }
         }
     }

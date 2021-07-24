@@ -89,11 +89,11 @@ app.post("/api/login", async (req: Request, res: Response): Promise<void> => {
 //
 // Store Routes
 //
-app.get("/api/stores", authorization("store", WARRANT_IGNORE_ID, ["view"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.get("/api/stores", authorization("store", WARRANT_IGNORE_ID, ["viewer"], getLoggedInUserId), (req: Request, res: Response): void => {
     res.json(stores);
 });
 
-app.get("/api/stores/:storeId", authorization("store", "storeId", ["view"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.get("/api/stores/:storeId", authorization("store", "storeId", ["viewer"], getLoggedInUserId), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const [store, _] = getStore(storeId);
 
@@ -105,7 +105,7 @@ app.get("/api/stores/:storeId", authorization("store", "storeId", ["view"], getL
     res.json(store);
 });
 
-app.post("/api/stores/:storeId", authorization("store", "storeId", ["edit"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.post("/api/stores/:storeId", authorization("store", "storeId", ["editor"], getLoggedInUserId), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const [store, index] = getStore(storeId);
 
@@ -124,7 +124,7 @@ app.post("/api/stores/:storeId", authorization("store", "storeId", ["edit"], get
 //
 // Item Routes
 //
-app.get("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["view"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.get("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["viewer"], getLoggedInUserId), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const itemId = parseInt(req.params.itemId);
 
@@ -143,7 +143,7 @@ app.get("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["
     res.json(item);
 });
 
-app.post("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["edit"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.post("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["editor"], getLoggedInUserId), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const itemId = parseInt(req.params.itemId);
     const [store, storeIndex] = getStore(storeId);

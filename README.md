@@ -95,7 +95,14 @@ npm run start
 
 ## Client (React)
 ```bash
-cd client
+cd client/react
 npm install
 npm run dev
+```
+
+## Client (Vue)
+```bash
+cd client/vue
+npm install
+npm run serve
 ```

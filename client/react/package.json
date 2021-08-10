@@ -1,7 +1,7 @@
 {
-  "name": "warrant-demo-app-client-ts",
+  "name": "warrant-demo-app-client-react",
   "version": "1.0.0",
-  "description": "The client for a demo app for showcasing how to integrate Warrant into a typescript/javascript backend",
+  "description": "A client demo app showcasing how to integrate Warrant into a React application",
   "main": "src/index.ts",
   "scripts": {
     "dev": "webpack serve --open --mode development --config webpack.common.js",

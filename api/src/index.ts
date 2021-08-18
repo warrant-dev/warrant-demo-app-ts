@@ -188,21 +188,6 @@ function getUserByEmail(email: string): [User, number] | [undefined, number] {
     return [targetUser, index];
 }
 
-function getUserById(id: number): [User, number] | [undefined, number] {
-    let targetUser: User;
-    let index;
-
-    for (index = 0; index < users.length; index++) {
-        const user = users[index];
-        if (user.id === id) {
-            targetUser = user;
-            break;
-        }
-    }
-
-    return [targetUser, index];
-}
-
 function getStore(id: number): [Store, number] | [undefined, number] {
     let targetStore: Store;
     let index;

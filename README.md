@@ -1,5 +1,7 @@
 # Warrant Demo Application
 
+[![Discord](https://img.shields.io/discord/865661082203193365?label=discord)](https://discord.gg/QNCMKWzqET)
+
 ## Create object types
 ```bash
 curl "https://api.warrant.dev/v1/object-types" \

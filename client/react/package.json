@@ -10,7 +10,7 @@
   "author": "Warrant <hello@warrant.dev> (https://warrant.dev)",
   "license": "ISC",
   "dependencies": {
-    "@warrantdev/react-warrant-js": "^0.0.2",
+    "@warrantdev/react-warrant-js": "^0.0.4",
     "axios": "^0.21.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

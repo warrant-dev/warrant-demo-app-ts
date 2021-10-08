@@ -1,5 +1,6 @@
-import express, { Request, Response, NextFunction} from "express";
-import {Client as Warrant, WARRANT_IGNORE_ID} from "@warrantdev/warrant-node";
+import express, { Request, Response } from "express";
+import { Client as Warrant } from "@warrantdev/warrant-node";
+import { createMiddleware, WARRANT_IGNORE_ID } from "@warrantdev/warrant-express-middleware";
 import cors from "cors";
 
 import User from "./types/User";
@@ -27,31 +28,16 @@ let stores: Store[] = require("../stores.json");
 // Use secure methods of authentication and sharing
 // secrets with your application.
 //
-const warrantApiKey = "<replace_with_your_api_key>";
+const warrantApiKey = "api_test_ZpJcbKyo6ofhL-sD8zFfTlL1cG6Dtg-k78QVwSMhMds=";
 let loggedInUserId: number | null = null;
-
-function getLoggedInUserId(): string {
-    return loggedInUserId.toString();
-}
 
 //
 // Authorization Middleware
 //
-function authorization(objectType: string, objectIdParam: string, relations: string[], getCurrentUserId: () => string) {
-    return async (req: Request, res: Response, next: NextFunction) => {
-        const warrant = new Warrant(warrantApiKey);
-        const objectId = req.params[objectIdParam];
-
-        for (const relation of relations) {
-            if (await warrant.isAuthorized(objectType, objectId, relation, getCurrentUserId().toString())) {
-                next();
-                return;
-            }
-        }
-
-        res.sendStatus(401);
-    }
-}
+const authorize = createMiddleware({
+    clientKey: warrantApiKey,
+    getUserId: () => loggedInUserId.toString(),
+});
 
 //
 // Authentication Routes
@@ -89,11 +75,11 @@ app.post("/api/login", async (req: Request, res: Response): Promise<void> => {
 //
 // Store Routes
 //
-app.get("/api/stores", authorization("store", WARRANT_IGNORE_ID, ["viewer"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.get("/api/stores", authorize("store", WARRANT_IGNORE_ID, "viewer"), (req: Request, res: Response): void => {
     res.json(stores);
 });
 
-app.get("/api/stores/:storeId", authorization("store", "storeId", ["viewer"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.get("/api/stores/:storeId", authorize("store", "storeId", "viewer"), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const [store, _] = getStore(storeId);
 
@@ -105,7 +91,7 @@ app.get("/api/stores/:storeId", authorization("store", "storeId", ["viewer"], ge
     res.json(store);
 });
 
-app.post("/api/stores/:storeId", authorization("store", "storeId", ["editor"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.post("/api/stores/:storeId", authorize("store", "storeId", "editor"), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const [store, index] = getStore(storeId);
 
@@ -124,7 +110,7 @@ app.post("/api/stores/:storeId", authorization("store", "storeId", ["editor"], g
 //
 // Item Routes
 //
-app.get("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["viewer"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.get("/api/stores/:storeId/items/:itemId", authorize("item", "itemId", "viewer"), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const itemId = parseInt(req.params.itemId);
 
@@ -143,7 +129,7 @@ app.get("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["
     res.json(item);
 });
 
-app.post("/api/stores/:storeId/items/:itemId", authorization("item", "itemId", ["editor"], getLoggedInUserId), (req: Request, res: Response): void => {
+app.post("/api/stores/:storeId/items/:itemId", authorize("item", "itemId", "editor"), (req: Request, res: Response): void => {
     const storeId = parseInt(req.params.storeId);
     const itemId = parseInt(req.params.itemId);
     const [store, storeIndex] = getStore(storeId);

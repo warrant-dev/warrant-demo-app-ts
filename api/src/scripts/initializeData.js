@@ -1,7 +1,7 @@
 const Warrant = require("@warrantdev/warrant-node");
 const users = require("../../users.json");
 const warrants = require("../../warrants.json");
-const warrantClient = new Warrant.Client("api_test_ZpJcbKyo6ofhL-sD8zFfTlL1cG6Dtg-k78QVwSMhMds=");
+const warrantClient = new Warrant.Client("<replace_with_your_api_key>");
 
 (async () => {
     // Create users in Warrant

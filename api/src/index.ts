@@ -28,7 +28,7 @@ let stores: Store[] = require("../stores.json");
 // Use secure methods of authentication and sharing
 // secrets with your application.
 //
-const warrantApiKey = "api_test_ZpJcbKyo6ofhL-sD8zFfTlL1cG6Dtg-k78QVwSMhMds=";
+const warrantApiKey = "<replace_with_your_api_key>";
 let loggedInUserId: number | null = null;
 
 //

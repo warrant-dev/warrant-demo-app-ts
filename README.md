@@ -2,7 +2,13 @@
 
 [![Discord](https://img.shields.io/discord/865661082203193365?label=discord)](https://discord.gg/QNCMKWzqET)
 
-## Create object types
+This demo application demonstrates how to add full-stack access control (specifically Role Based Access Control) to an ExpressJS + React application. The app uses the [Warrant NodeJS SDK](https://www.npmjs.com/package/@warrantdev/warrant-node) and [Warrant ExpressJS middleware](https://www.npmjs.com/package/@warrantdev/warrant-express-middleware) to control access to the API and data passed to the frontend. The React frontend uses the [Warrant React SDK](https://www.npmjs.com/package/@warrantdev/react-warrant-js) to show/hide components in the UI based on each user's permitted access.
+
+## Get Started
+
+After creating a Warrant account [here](https://app.warrant.dev/signup), follow the steps below to get the demo app running locally.
+
+### Create object types
 ```bash
 curl "https://api.warrant.dev/v1/object-types" \
     -X POST \
@@ -82,12 +88,12 @@ curl "https://api.warrant.dev/v1/object-types" \
     }'
 ```
 
-## API Key
+### API Key
 Replace occurences of `<replace_with_your_api_key>` in `/api/src/index.ts` and `/api/src/scripts/initializeData.js` with your API Key.
 
 Replace occurence of `<replace_with_your_client_key>` in `/client/src/App.jsx` with your Client Key.
 
-## Server (Express)
+### Server (Express)
 ```bash
 cd api
 npm install
@@ -95,14 +101,14 @@ npm run init # only required the first time you setup the app
 npm run start
 ```
 
-## Client (React)
+### Client (React)
 ```bash
 cd client/react
 npm install
 npm run dev
 ```
 
-## Client (Vue)
+### Client (Vue)
 ```bash
 cd client/vue
 npm install

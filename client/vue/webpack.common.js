@@ -28,9 +28,12 @@ module.exports = env => {
         devServer: {
             compress: true,
             hot: true,
-            publicPath: '/',
             historyApiFallback: true,
             port: 5050,
+
+            devMiddleware: {
+                publicPath: "/",
+            }
         },
 
         resolve: {

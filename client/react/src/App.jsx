@@ -1,7 +1,7 @@
 import React from "react";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import { WarrantProvider, ProtectedRoute, WARRANT_IGNORE_ID } from "@warrantdev/react-warrant-js";
+import { WarrantProvider } from "@warrantdev/react-warrant-js";
 
 import Login from "./components/Login";
 import Stores from "./components/Stores";
@@ -22,54 +22,10 @@ const App = () => {
                         <Redirect to="/login"/>
                     </Route>
                     <Route path="/login" exact component={Login}/>
-                    <ProtectedRoute
-                        path="/stores/:storeId/items/:itemId"
-                        key="/stores/:storeId/items/:itemId"
-                        exact
-                        component={Item}
-                        options={{
-                            objectType: "item",
-                            objectIdParam: "itemId",
-                            relation: "viewer",
-                            redirectTo: "/",
-                        }}
-                    />
-                    <ProtectedRoute
-                        path="/stores/:storeId/edit"
-                        key="/stores/:storeId/edit"
-                        exact
-                        component={EditStore}
-                        options={{
-                            objectType: "store",
-                            objectIdParam: "storeId",
-                            relation: "editor",
-                            redirectTo: "/",
-                        }}
-                    />
-                    <ProtectedRoute
-                        path="/stores/:storeId"
-                        key="/stores/:storeId"
-                        exact
-                        component={Store}
-                        options={{
-                            objectType: "store",
-                            objectIdParam: "storeId",
-                            relation: "viewer",
-                            redirectTo: "/",
-                        }}
-                    />
-                    <ProtectedRoute
-                        path="/stores"
-                        key="/stores"
-                        exact
-                        component={Stores}
-                        options={{
-                            objectType: "store",
-                            objectIdParam: WARRANT_IGNORE_ID,
-                            relation: "viewer",
-                            redirectTo: "/",
-                        }}
-                    />
+                    <Route path="/stores/:storeId/items/:itemId" exact component={Item}/>
+                    <Route path="/stores/:storeId/edit" exact component={EditStore}/>
+                    <Route path="/stores/:storeId" exact component={Store}/>
+                    <Route path="/stores" exact component={Stores}/>
                 </Switch>
             </Router>
         </WarrantProvider>

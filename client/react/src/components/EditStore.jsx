@@ -8,19 +8,30 @@ import PageWrapper from "./PageWrapper";
 const EditStore = () => {
     const { storeId } = useParams();
     const [store, setStore] = useState({name: ""});
+    const [items, setItems] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
         const getStore = async () => {
             try {
-                const response = await Axios.get(`http://localhost:5000/api/stores/${storeId}`);
+                const response = await Axios.get(`http://localhost:3000/api/stores/${storeId}`);
                 setStore(response.data);
             } catch (e) {
                 console.log("Error getting store", e);
             }
         };
 
+        const getItems = async () => {
+            try {
+                const response = await Axios.get(`http://localhost:3000/api/stores/${storeId}/items`);
+                setItems(response.data);
+            } catch (e) {
+                console.log("Error getting items", e);
+            }
+        };
+
         getStore();
+        getItems();
     }, []);
 
     const handleNameUpdated = useCallback((event) => {
@@ -34,7 +45,7 @@ const EditStore = () => {
         event.preventDefault();
 
         try {
-            await Axios.post(`http://localhost:5000/api/stores/${storeId}`, {
+            await Axios.post(`http://localhost:3000/api/stores/${storeId}`, {
                 name: store.name,
             });
 

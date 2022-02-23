@@ -1,25 +1,25 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { Client as Warrant } from "@warrantdev/warrant-node";
-import { createMiddleware, WARRANT_IGNORE_ID } from "@warrantdev/warrant-express-middleware";
 import cors from "cors";
+import sqlite3 from "sqlite3";
+import { open, Database } from "sqlite";
 
 import User from "./types/User";
 import Store from "./types/Store";
 import Item from "./types/Item";
 
+let db: Database<sqlite3.Database, sqlite3.Statement>;
+(async () => {
+    db = await open({
+        filename: "./db/storify.db",
+        driver: sqlite3.Database,
+    });
+})();
+
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
-
-//
-// JSON Data
-// NOTE: This pattern is just for demo purposes and
-// should not be replicated in a production application.
-// Use a database to persist your application data.
-//
-let users: User[] = require("../users.json");
-let stores: Store[] = require("../stores.json");
 
 //
 // Global Variables
@@ -34,28 +34,52 @@ let loggedInUserId: number | null = null;
 //
 // Authorization Middleware
 //
-const authorize = createMiddleware({
-    clientKey: warrantApiKey,
-    getUserId: () => loggedInUserId.toString(),
-});
+// const authorize = createMiddleware({
+//     clientKey: warrantApiKey,
+//     getUserId: () => loggedInUserId.toString(),
+//     getParam: (req: Request, paramName: string) => paramName,
+// });
+
+const authorize = (objectType: string, objectId: string, relation: string) => {
+    return async (req: Request, res: Response, next?: NextFunction) => {
+        const userId = loggedInUserId;
+        if (userId === null) {
+            res.sendStatus(401);
+            return;
+        }
+
+        const warrant = new Warrant(warrantApiKey);
+        if (await warrant.isAuthorized(objectType, objectId, relation, userId.toString())) {
+            if (next) {
+                next();
+            }
+
+            return;
+        }
+
+        res.sendStatus(401);
+    };
+};
 
 //
 // Authentication Routes
 //
 app.post("/api/login", async (req: Request, res: Response): Promise<void> => {
     const email = req.body.email;
-    const [user, _] = getUserByEmail(email);
-
-    if (!user) {
-        res.sendStatus(401);
-        return;
-    }
-
-    loggedInUserId = user.id;
 
     try {
+        const user = await getUserByEmail(email);
+
+        if (!user) {
+            res.sendStatus(401);
+            return;
+        }
+
+        loggedInUserId = user.id;
+
         // Create a Warrant session token for the user
-        const warrantSessionToken = await new Warrant(warrantApiKey).createSession(loggedInUserId.toString());
+        const warrant = new Warrant(warrantApiKey);
+        const warrantSessionToken = await warrant.createSession(loggedInUserId.toString());
 
         // Return the Warrant session token to
         // the UI so we can use it to initialize
@@ -73,133 +97,174 @@ app.post("/api/login", async (req: Request, res: Response): Promise<void> => {
 });
 
 //
+// Warrant Session Route
+//
+app.post("/api/create-warrant-session", authorize("permission", "view-self-service-dashboard", "member"), async (req: Request, res: Response): Promise<void> => {
+    try {
+        const warrant = new Warrant(warrantApiKey);
+        const warrantSelfServiceDashUrl = await warrant.createSelfServiceSession(loggedInUserId.toString(), "http://localhost:5050/stores");
+
+        res.json({
+            warrantSelfServiceDashUrl,
+        });
+    } catch (e) {
+        res.sendStatus(500);
+        return;
+    }
+});
+
+//
 // Store Routes
 //
-app.get("/api/stores", authorize("store", WARRANT_IGNORE_ID, "viewer"), (req: Request, res: Response): void => {
-    res.json(stores);
+app.get("/api/stores", authorize("permission", "view-stores", "member"), async (req: Request, res: Response): Promise<void> => {
+    try {
+        const stores = await getStores();
+
+        res.json(stores);
+    } catch (e) {
+
+    }
 });
 
-app.get("/api/stores/:storeId", authorize("store", "storeId", "viewer"), (req: Request, res: Response): void => {
+app.get("/api/stores/:storeId", authorize("permission", "view-stores", "member"), async (req: Request, res: Response): Promise<void> => {
     const storeId = parseInt(req.params.storeId);
-    const [store, _] = getStore(storeId);
 
-    if (!store) {
-        res.sendStatus(404);
-        return;
+    try {
+        const store = await getStore(storeId);
+
+        if (!store) {
+            res.sendStatus(404);
+            return;
+        }
+
+        res.json(store);
+    } catch (e) {
+
     }
-
-    res.json(store);
 });
 
-app.post("/api/stores/:storeId", authorize("store", "storeId", "editor"), (req: Request, res: Response): void => {
+app.post("/api/stores/:storeId", authorize("permission", "edit-stores", "member"), async (req: Request, res: Response): Promise<void> => {
     const storeId = parseInt(req.params.storeId);
-    const [store, index] = getStore(storeId);
 
-    if (!store) {
-        res.sendStatus(404);
-        return;
+    try {
+        const store = await getStore(storeId);
+
+        if (!store) {
+            res.sendStatus(404);
+            return;
+        }
+
+        await updateStoreName(storeId, req.body.name);
+
+        res.json({
+            ...store,
+            name: req.body.name,
+        });
+    } catch (e) {
+
     }
-
-    let updatedStore = {...store};
-    updatedStore.name = req.body.name;
-    stores[index] = updatedStore;
-
-    res.json(updatedStore);
 });
 
 //
 // Item Routes
 //
-app.get("/api/stores/:storeId/items/:itemId", authorize("item", "itemId", "viewer"), (req: Request, res: Response): void => {
+app.get("/api/stores/:storeId/items", authorize("permission", "view-items", "member"), async (req: Request, res: Response): Promise<void> => {
+    const storeId = parseInt(req.params.storeId);
+
+    try {
+        const store = await getStore(storeId);
+        if (!store) {
+            res.sendStatus(404);
+            return;
+        }
+
+        const items = await getItems(storeId);
+        res.json(items);
+    } catch (e) {
+
+    }
+});
+
+app.get("/api/stores/:storeId/items/:itemId", authorize("permission", "view-items", "member"), async (req: Request, res: Response): Promise<void> => {
     const storeId = parseInt(req.params.storeId);
     const itemId = parseInt(req.params.itemId);
 
-    const [store, _storeIndex] = getStore(storeId);
-    if (!store) {
-        res.sendStatus(404);
-        return;
-    }
+    try {
+        const item = await getItem(storeId, itemId);
 
-    const [item, _itemIndex] = getItem(store, itemId);
-    if (!item) {
-        res.sendStatus(404);
-        return;
-    }
+        if (!item) {
+            res.sendStatus(404);
+            return;
+        }
 
-    res.json(item);
+        res.json(item);
+    } catch (e) {
+
+    }
 });
 
-app.post("/api/stores/:storeId/items/:itemId", authorize("item", "itemId", "editor"), (req: Request, res: Response): void => {
-    const storeId = parseInt(req.params.storeId);
-    const itemId = parseInt(req.params.itemId);
-    const [store, storeIndex] = getStore(storeId);
+// app.post("/api/stores/:storeId/items/:itemId", authorize("permission", "edit-items", "member"), (req: Request, res: Response): void => {
+//     const storeId = parseInt(req.params.storeId);
+//     const itemId = parseInt(req.params.itemId);
+//     const [store, storeIndex] = getStore(storeId);
 
-    if (!store) {
-        res.sendStatus(404);
-        return;
-    }
+//     if (!store) {
+//         res.sendStatus(404);
+//         return;
+//     }
 
-    const [item, itemIndex] = getItem(store, itemId);
-    if (!item) {
-        res.sendStatus(404);
-        return;
-    }
+//     const [item, itemIndex] = getItem(store, itemId);
+//     if (!item) {
+//         res.sendStatus(404);
+//         return;
+//     }
 
-    let updatedItem = {...item};
-    updatedItem.name = req.body.name;
-    updatedItem.description = req.body.description;
-    updatedItem.price = req.body.price;
-    stores[storeIndex].items[itemIndex] = updatedItem;
+//     let updatedItem = { ...item };
+//     updatedItem.name = req.body.name;
+//     updatedItem.description = req.body.description;
+//     updatedItem.price = req.body.price;
+//     stores[storeIndex].items[itemIndex] = updatedItem;
 
-    res.json(updatedItem);
-});
+//     res.json(updatedItem);
+// });
 
-const port = 5000;
-app.listen(port, () => {
+const port = 3000;
+app.listen(port, async () => {
     console.log(`Server listening on port ${port}. API available at http://localhost:${port}`);
 });
 
-function getUserByEmail(email: string): [User, number] | [undefined, number] {
-    let targetUser: User;
-    let index;
-
-    for (index = 0; index < users.length; index++) {
-        const user = users[index];
-        if (user.email === email) {
-            targetUser = user;
-            break;
-        }
-    }
-
-    return [targetUser, index];
+async function getUserByEmail(email: string): Promise<User> {
+    return db.get<User>("SELECT * FROM users WHERE email = :email", {
+        ":email": email,
+    });
 }
 
-function getStore(id: number): [Store, number] | [undefined, number] {
-    let targetStore: Store;
-    let index;
-
-    for (index = 0; index < stores.length; index++) {
-        const store = stores[index];
-        if (store.id === id) {
-            targetStore = store;
-            break;
-        }
-    }
-
-    return [targetStore, index];
+async function getStores(): Promise<Store[]> {
+    return db.all<Store[]>("SELECT * FROM stores");
 }
 
-function getItem(store: Store, itemId: number): [Item, number] | [undefined, number] {
-    let targetItem: Item;
-    let index;
+async function getStore(id: number): Promise<Store> {
+    return db.get<Store>("SELECT * FROM stores WHERE id = :id", {
+        ":id": id,
+    });
+}
 
-    for (index = 0; index < store.items.length; index++) {
-        const item = store.items[index];
-        if (item.id === itemId) {
-            targetItem = item;
-            break;
-        }
-    }
+async function updateStoreName(id: number, updatedName: string): Promise<void> {
+    db.run("UPDATE stores SET name = :name WHERE id = :id", {
+        ":id": id,
+        ":name": updatedName,
+    });
+};
 
-    return [targetItem, index];
+async function getItems(storeId: number): Promise<Item[]> {
+    return db.all<Item[]>("SELECT * FROM items WHERE storeId = :storeId", {
+        ":storeId": storeId,
+    });
+}
+
+async function getItem(storeId: number, itemId: number): Promise<Item> {
+    return db.get<Item>("SELECT * FROM items WHERE storeId = :storeId AND itemId = :itemId", {
+        ":storeId": storeId,
+        ":itemId": itemId,
+    });
 }

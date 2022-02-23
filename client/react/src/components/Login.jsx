@@ -18,7 +18,7 @@ const Login = () => {
         event.preventDefault();
 
         try {
-            const response = await Axios.post("http://localhost:5000/api/login", {
+            const response = await Axios.post("http://localhost:3000/api/login", {
                 email,
             });
 
@@ -46,11 +46,13 @@ const Login = () => {
         </LoginForm>
         <UserList>
             <h3>Users</h3>
-            <h4>ceo@demoapp-inc.com (15) - Super Admin</h4>
-            <h4>jane@demoapp-inc.com (34) - Super Admin</h4>
-            <h4>tony@starkindustries.com (7409) - Store Owner</h4>
-            <h4>michael.scott@dundermifflin.com (38265) - Store Owner</h4>
-            <h4>johndoe@gmail.com (12107) - Shopper</h4>
+            {/* <h4>ceo@demoapp-inc.com (15) - Super Admin</h4> */}
+            {/* <h4>jane@demoapp-inc.com (34) - Super Admin</h4> */}
+            <h4>tony@starkindustries.com - Admin</h4>
+            <h4>pepper.potts@starkindustries.com - Merchandise Buyer</h4>
+            <h4>michael.scott@dundermifflin.com - Admin</h4>
+            <h4>pamela.beesly@dundermifflin.com - Merchandise Buyer</h4>
+            <h4>ryan.howard@dundermifflin.com - Shopper</h4>
         </UserList>
     </PageWrapper>;
 }

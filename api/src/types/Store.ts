@@ -1,8 +1,7 @@
 import Item from "./Item";
 
 export default interface Store {
-    id: number;
-    userId: number;
+    id: string;
     name: string;
     items: Item[];
 }

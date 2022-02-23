@@ -8,18 +8,28 @@ import PageWrapper from "./PageWrapper";
 const Store = () => {
     const { storeId } = useParams();
     const [store, setStore] = useState();
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
         const getStore = async () => {
             try {
-                const response = await Axios.get(`http://localhost:5000/api/stores/${storeId}`);
+                const response = await Axios.get(`http://localhost:3000/api/stores/${storeId}`);
                 setStore(response.data);
             } catch (e) {
                 console.log("Error getting store", e);
             }
         };
+        const getItems = async () => {
+            try {
+                const response = await Axios.get(`http://localhost:3000/api/stores/${storeId}/items`);
+                setItems(response.data);
+            } catch (e) {
+                console.log("Error getting items", e);
+            }
+        };
 
         getStore();
+        getItems();
     }, []);
 
     if (!store) {
@@ -32,7 +42,7 @@ const Store = () => {
             <EditButton to={`/stores/${storeId}/edit`}>Edit Store</EditButton>
         </ProtectedComponent>
         <ItemList>
-            {store.items.map((item) => <Item key={item.id}>
+            {items.map((item) => <Item key={item.id}>
                 <Link to={`/stores/${storeId}/items/${item.id}`}><h3>{item.name} - ${item.price}</h3></Link>
                 <p>{item.description}</p>
             </Item>)}

@@ -1,11 +1,5 @@
 [
     {
-        "type": "group",
-        "relations": {
-            "member": {}
-        }
-    },
-    {
         "type": "store",
         "relations": {
             "owner": {},
@@ -33,14 +27,14 @@
     {
         "type": "item",
         "relations": {
-            "parent_store": {},
+            "parent": {},
             "creator": {},
             "editor": {
                 "type": "anyOf",
                 "rules": [
                     {
                         "type": "objectUserset",
-                        "relation": "parent_store",
+                        "relation": "parent",
                         "userset": {
                             "type": "userset",
                             "relation": "editor"

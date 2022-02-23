@@ -11,7 +11,7 @@ const Item = () => {
     useEffect(() => {
         const getItem = async () => {
             try {
-                const response = await Axios.get(`http://localhost:5000/api/stores/${storeId}/items/${itemId}`);
+                const response = await Axios.get(`http://localhost:3000/api/stores/${storeId}/items/${itemId}`);
                 setItem(response.data);
             } catch (e) {
                 console.log("Error getting item", e);

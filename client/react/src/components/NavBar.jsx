@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const NavBar = () => {
     return <NavBarWrapper>
-        <Logo to="/">Demo App</Logo>
+        <Logo to="/">Storify</Logo>
     </NavBarWrapper>;
 };
 

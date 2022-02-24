@@ -1,18 +1,19 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Client as Warrant } from "@warrantdev/warrant-node";
 import cors from "cors";
-import sqlite3 from "sqlite3";
-import { open, Database } from "sqlite";
+import mysql from "mysql2/promise";
 
-import User from "./types/User";
-import Store from "./types/Store";
-import Item from "./types/Item";
+import User, { IUser } from "./types/User";
+import Store, { IStore } from "./types/Store";
+import Item, { IItem } from "./types/Item";
 
-let db: Database<sqlite3.Database, sqlite3.Statement>;
+let db: mysql.Connection;
 (async () => {
-    db = await open({
-        filename: "./db/storify.db",
-        driver: sqlite3.Database,
+    db = await mysql.createConnection({
+        host: "127.0.0.1",
+        user: "root",
+        password: "",
+        database: "storify",
     });
 })();
 
@@ -234,37 +235,41 @@ app.listen(port, async () => {
 });
 
 async function getUserByEmail(email: string): Promise<User> {
-    return db.get<User>("SELECT * FROM users WHERE email = :email", {
-        ":email": email,
-    });
+    const [rows]: [IUser[], any] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
+
+    return rows[0];
 }
 
 async function getStores(): Promise<Store[]> {
-    return db.all<Store[]>("SELECT * FROM stores");
+    const [rows]: [IStore[], any] = await db.execute("SELECT * FROM stores");
+
+    return rows;
 }
 
 async function getStore(id: number): Promise<Store> {
-    return db.get<Store>("SELECT * FROM stores WHERE id = :id", {
-        ":id": id,
-    });
+    const [rows]: [IStore[], any] = await db.execute("SELECT * FROM stores WHERE id = ?", [id]);
+
+    return rows[0];
 }
 
 async function updateStoreName(id: number, updatedName: string): Promise<void> {
-    db.run("UPDATE stores SET name = :name WHERE id = :id", {
-        ":id": id,
-        ":name": updatedName,
-    });
-};
+    await db.execute("UPDATE stores SET name = ? WHERE id = ?", [
+        id,
+        updatedName,
+    ]);
+}
 
 async function getItems(storeId: number): Promise<Item[]> {
-    return db.all<Item[]>("SELECT * FROM items WHERE storeId = :storeId", {
-        ":storeId": storeId,
-    });
+    const [rows]: [IItem[], any] = await db.execute("SELECT * FROM items WHERE storeId = ?", [storeId]);
+
+    return rows;
 }
 
 async function getItem(storeId: number, itemId: number): Promise<Item> {
-    return db.get<Item>("SELECT * FROM items WHERE storeId = :storeId AND itemId = :itemId", {
-        ":storeId": storeId,
-        ":itemId": itemId,
-    });
+    const [rows]: [IItem[], any] = await db.execute("SELECT * FROM items WHERE storeId = ? AND id = ?", [
+        storeId,
+        itemId,
+    ]);
+
+    return rows[0];
 }

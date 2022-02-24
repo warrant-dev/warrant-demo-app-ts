@@ -1,5 +1,4 @@
-const sqlite3 = require("sqlite3");
-const sqlite = require("sqlite");
+const mysql = require("mysql2/promise");
 const Warrant = require("@warrantdev/warrant-node");
 const warrant = new Warrant.Client("<replace_with_your_api_key>");
 const stores = [
@@ -94,110 +93,122 @@ const stores = [
 
 (async () => {
     try {
-        const db = await sqlite.open({
-            filename: "./db/storify.db",
-            driver: sqlite3.Database,
+        const db = await mysql.createConnection({
+            host: "127.0.0.1",
+            user: "root",
+            password: "",
         });
 
-        await db.exec(`
-            CREATE TABLE stores (
-                id INTEGER PRIMARY KEY,
-                name TEXT NOT NULL
+        db.connect();
+
+        await db.execute("CREATE DATABASE IF NOT EXISTS storify");
+
+        await db.execute(`
+            CREATE TABLE storify.stores (
+                id INTEGER AUTO_INCREMENT,
+                name TEXT NOT NULL,
+                PRIMARY KEY (id)
             )
         `);
 
-        await db.exec(`
-            CREATE TABLE users (
-                id INTEGER PRIMARY KEY,
-                email TEXT NOT NULL UNIQUE,
+        await db.execute(`
+            CREATE TABLE storify.users (
+                id INTEGER AUTO_INCREMENT,
+                email VARCHAR(255) NOT NULL,
                 firstName TEXT NOT NULL,
                 lastName TEXT NOT NULL,
                 storeId INTEGER,
-                FOREIGN KEY (storeId) REFERENCES stores (id)
+                FOREIGN KEY (storeId) REFERENCES stores (id),
+                UNIQUE(email),
+                PRIMARY KEY (id)
             )
     `   );
 
-        await db.exec(`
-            CREATE TABLE items (
-                id INTEGER PRIMARY KEY,
+        await db.execute(`
+            CREATE TABLE storify.items (
+                id INTEGER AUTO_INCREMENT,
                 name TEXT NOT NULL,
                 description TEXT NOT NULL,
+                price DECIMAL(13, 2) NOT NULL,
                 storeId INTEGER,
-                FOREIGN KEY (storeId) REFERENCES stores (id)
+                FOREIGN KEY (storeId) REFERENCES stores (id),
+                PRIMARY KEY (id)
             )
         `);
 
-        // Create stores (tenants), items, and users in sqlite & Warrant
+        // Create stores (tenants), items, and users in SQL DB & Warrant
         for (const store of stores) {
-            const storeResult = await db.run("INSERT INTO stores (name) VALUES (:name)", {
-                ":name": store.name,
-            });
+            const storeResult = await db.execute("INSERT INTO storify.stores (name) VALUES (?)", [store.name]);
 
             // Create tenant for store in Warrant
-            const storeId = storeResult.lastID.toString();
-            await warrant.createTenant(storeId);
+            const storeId = storeResult[0].insertId.toString();
+            // await warrant.createTenant(storeId);
 
             for (const user of store.users) {
-                const userResult = await db.run("INSERT INTO users (email, firstName, lastName) VALUES (:email, :firstName, :lastName)", {
-                    ":email": user.email,
-                    ":firstName": user.firstName,
-                    ":lastName": user.lastName,
-                });
+                const userResult = await db.execute("INSERT INTO storify.users (email, firstName, lastName, storeId) VALUES (?, ?, ?, ?)", [
+                    user.email,
+                    user.firstName,
+                    user.lastName,
+                    storeId,
+                ]);
 
-                const userId = userResult.lastID.toString();
-                await warrant.createUser(user.email, userId, storeId);
+                const userId = userResult[0].insertId.toString();
+                // await warrant.createUser(user.email, userId, storeId);
             }
 
             for (const item of store.items) {
-                const itemResult = await db.run("INSERT INTO items (name, description, storeId) VALUES (:name, :description, :storeId)", {
-                    ":name": item.name,
-                    ":description": item.description,
-                    ":storeId": storeResult.lastID,
-                });
+                const itemResult = await db.execute("INSERT INTO storify.items (name, description, price, storeId) VALUES (?, ?, ?, ?)", [
+                    item.name,
+                    item.description,
+                    item.price,
+                    storeResult[0].insertId,
+                ]);
             }
         }
 
-        // Create permissions in Warrant
-        await warrant.createPermission("view-stores");
-        await warrant.createPermission("edit-stores");
-        await warrant.createPermission("view-items");
-        await warrant.createPermission("edit-items");
+        // // Create permissions in Warrant
+        // await warrant.createPermission("view-stores");
+        // await warrant.createPermission("edit-stores");
+        // await warrant.createPermission("view-items");
+        // await warrant.createPermission("edit-items");
 
-        // Create roles in Warrant
-        await warrant.createRole("basic");
-        await warrant.createWarrant("permission", "view-stores", "member", {
-            objectType: "role",
-            objectId: "basic",
-            relation: "member"
-        });
-        await warrant.createWarrant("permission", "view-items", "member", {
-            objectType: "role",
-            objectId: "basic",
-            relation: "member"
-        });
+        // // Create roles in Warrant
+        // await warrant.createRole("basic");
+        // await warrant.createWarrant("permission", "view-stores", "member", {
+        //     objectType: "role",
+        //     objectId: "basic",
+        //     relation: "member"
+        // });
+        // await warrant.createWarrant("permission", "view-items", "member", {
+        //     objectType: "role",
+        //     objectId: "basic",
+        //     relation: "member"
+        // });
 
-        await warrant.createRole("store-manager");
-        await warrant.createWarrant("role", "basic", "member", {
-            objectType: "role",
-            objectId: "store-manager",
-            relation: "member"
-        });
-        await warrant.createWarrant("permission", "edit-stores", "member", {
-            objectType: "role",
-            objectId: "store-manager",
-            relation: "member"
-        });
-        await warrant.createWarrant("permission", "edit-items", "member", {
-            objectType: "role",
-            objectId: "store-manager",
-            relation: "member"
-        });
+        // await warrant.createRole("store-manager");
+        // await warrant.createWarrant("role", "basic", "member", {
+        //     objectType: "role",
+        //     objectId: "store-manager",
+        //     relation: "member"
+        // });
+        // await warrant.createWarrant("permission", "edit-stores", "member", {
+        //     objectType: "role",
+        //     objectId: "store-manager",
+        //     relation: "member"
+        // });
+        // await warrant.createWarrant("permission", "edit-items", "member", {
+        //     objectType: "role",
+        //     objectId: "store-manager",
+        //     relation: "member"
+        // });
 
-        await warrant.createWarrant("role", "store-manager", "member", {
-            objectType: "role",
-            objectId: "admin",
-            relation: "member"
-        });
+        // await warrant.createWarrant("role", "store-manager", "member", {
+        //     objectType: "role",
+        //     objectId: "admin",
+        //     relation: "member"
+        // });
+
+        db.end();
     } catch (e) {
         console.log(e);
         process.exit(1);

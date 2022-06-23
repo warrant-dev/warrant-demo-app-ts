@@ -1,6 +1,6 @@
 # Warrant Demo Application
 
-[![Discord](https://img.shields.io/discord/865661082203193365?label=discord)](https://discord.gg/QNCMKWzqET)
+[![Slack](https://img.shields.io/badge/slack-join-brightgreen)](https://join.slack.com/t/warrantcommunity/shared_invite/zt-12g84updv-5l1pktJf2bI5WIKN4_~f4w)
 
 This demo application demonstrates how to add full-stack access control (specifically Role Based Access Control) to an ExpressJS + React application. The app uses the [Warrant NodeJS SDK](https://www.npmjs.com/package/@warrantdev/warrant-node) and [Warrant ExpressJS middleware](https://www.npmjs.com/package/@warrantdev/warrant-express-middleware) to control access to the API and data passed to the frontend. The React frontend uses the [Warrant React SDK](https://www.npmjs.com/package/@warrantdev/react-warrant-js) to show/hide components in the UI based on each user's permitted access.
 

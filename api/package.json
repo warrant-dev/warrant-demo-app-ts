@@ -18,7 +18,7 @@
         "cors": "^2.8.5",
         "express": "^4.17.1",
         "sqlite": "^4.0.23",
-        "sqlite3": "^5.0.2"
+        "sqlite3": "^5.1.5"
     },
     "devDependencies": {
         "@types/cors": "^2.8.10",
